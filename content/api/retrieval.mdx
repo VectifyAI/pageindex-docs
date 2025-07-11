@@ -1,0 +1,91 @@
+# Retrieval API
+
+### Query a PageIndex Document
+
+* **Endpoint:** `GET` `https://api.vectify.ai/pageindex/{doc_id}?query=YOUR_QUERY_TEXT`
+* **Description:** Submit a query to retrieve relevant information from a specified PageIndex-processed document using reasoning-based retrieval.
+
+**Parameters:**
+
+* `doc_id` (string, required, in URL path)
+* `query` (string, required, in query string)
+
+**Example:**
+
+```python
+doc_id = "abc123def456"
+query = "What are the main sources of revenue"
+
+response = requests.get(
+    f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
+    headers={"api_key": "YOUR_API_KEY_HERE"}
+)
+```
+
+**Example Response:**
+
+```json
+{
+  "retrieval_id": "xyz789ghi012"
+}
+```
+
+---
+
+### Get Retrieval Status & Results
+
+* **Endpoint:**  `GET` `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/`
+* **Description:**  Get the status and, when ready, the result for a specific retrieval query.
+
+**Parameters (URL Path):**
+
+* `retrieval_id` (string, required)
+
+**Example:**
+
+```python
+retrieval_id = "xyz789ghi012"
+
+response = requests.get(
+    f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
+    headers={"api_key": "YOUR_API_KEY_HERE"}
+)
+```
+
+**Example Response (Processing):**
+
+```json
+{
+  "retrieval_id": "xyz789ghi012",
+  "status": "processing"
+}
+```
+
+**Example Response (Completed):**
+
+```json
+{
+  "retrieval_id": "xyz789ghi012",
+  "status": "completed",
+  "query": "What are the recent trends in the labor market?",
+  "retrieved_nodes": [
+    {
+      "title": "March 2024 Summary",
+      "node_id": "0005",
+      "relevant_contents": [
+        {
+          "physical_index": 10,
+          "relevant_content": "The labor market has gained averaging 239,000 per month since June 2023..."
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## 💬 Support
+
+* 🤝 [Join our Discord](https://discord.gg/VuXuf29EUj)
+* 📨 [Contact Us](https://ii2abc2jejf.typeform.com/to/meB40zV0)

@@ -1,0 +1,63 @@
+# Document Search Examples
+
+{/* Currently, PageIndex provides RAG capabilities within a single document. 
+For users who need to select which document to retrieve from, we offer two examples demonstrating how to search across documents in different scenarios. */}
+
+PageIndex currently enables reasoning-based RAG within a single document by default.
+For users who need to search across multiple documents, we provide two best-practice workflows below for different scenarios.
+
+## SQL-based Document Search
+
+When your documents include structured metadata, you can leverage SQL for efficient and accurate document searching. This approach works best when documents can be clearly distinguished by their metadata.
+
+<div className="bg-blue-50 dark:bg-blue-900/30 rounded-md p-4 my-2 border border-blue-200 dark:border-blue-700">
+<strong>Example Pipeline</strong>
+1. Store documents and metadata in a database table  
+2. Use LLM to transform natural language questions into SQL queries  
+3. Execute the SQL query to retrieve relevant documents  
+
+</div>
+
+## Description-based Document Search
+
+For documents that can't be distinguished by metadata, use LLM-generated descriptions for document selection.
+
+#### Example Prompt
+
+Below is a sample prompt for document selection based on their descriptions:
+
+```python
+prompt = """ 
+You are given a list of documents with their IDs, file names, and descriptions. Your task is to select documents that may contain information relevant to answering the user query.
+
+Query: {query}
+
+Documents: [
+    {
+        "doc_id": "xxx",
+        "doc_name": "xxx",
+        "doc_description": "xxx"
+    }
+]
+
+Response Format:
+{{
+    "thinking": "<Your reasoning for document selection>",
+    "answer": <Python list of relevant doc_ids>, e.g. ['doc_id1', 'doc_id2']. Return [] if no documents are relevant.
+}}
+
+Return only the JSON structure, with no additional output.
+"""
+```
+
+<div className="mt-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-md p-4 my-2 border border-yellow-200 dark:border-yellow-700">
+<strong>Tips</strong>
+For large document collections, you can divide documents into groups and process groups in parallel for document selection.
+</div>
+
+
+## 💬 Help & Community
+Contact us if you need any advice on conducting document searches for your use case.
+
+- 🤝 [Join our Discord](https://discord.gg/VuXuf29EUj)  
+- 📨 [Leave us a message](https://ii2abc2jejf.typeform.com/to/meB40zV0)

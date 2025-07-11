@@ -12,11 +12,13 @@ export const metadata = {
 const banner = <Banner storageKey="some-key">This template was created with 🩸 and 💦 by <Link href="https://github.com/phucbm">PHUCBM</Link> 🐧</Banner>
 const navbar = (
     <Navbar
-        logo={<img src="/images/general/pi-logo.png" alt="Logo" style={{height: 40}}/>}
+        logo={<img src="/images/general/pi-logo.png" alt="Logo" style={{height: 45}}/>}
+        chatLink="https://discord.gg/VuXuf29EUj"
+        projectLink="https://pageindex.ai"
         // ... Your additional navbar options
     />
 )
-const footer = <Footer>MIT {new Date().getFullYear()} © Nextra.</Footer>
+const footer = <Footer>{new Date().getFullYear()} © Vectify AI.</Footer>
 
 export default async function RootLayout({children}) {
     return (

@@ -1,53 +1,102 @@
+# 🚀 Quickstart: PageIndex API
+
+Get started with PageIndex by first getting your 🔑 [API key](https://pageindex.vectify.ai/api-keys).
+
+The PageIndex API consists of two main components:
+
+* **PageIndex Tree Generation**: Upload a document to generate a PageIndex tree index.
+* **PageIndex Retrieval**: Ask a query to retrieve relevant content from a document.
+
+This document provides a brief introduction to using the API and includes example response formats.
+
 ---
-title: Quick Start
+
+### 🌲 PageIndex Tree Generation
+
+Use this API to extract and return a PageIndex structure from a document.
+
+**Endpoints**
+
+* **Submit a document:** `https://api.vectify.ai/pageindex/` `(POST)`
+* **Get status and result:** `https://api.vectify.ai/pageindex/{doc_id}/` `(GET)`
+* **Delete:** `https://api.vectify.ai/pageindex/{doc_id}/` `(DELETE)`
+
+**Example (Python)**
+
+```python
+import requests
+
+# Submit document for PageIndex tree generation
+with open('./2023-annual-report.pdf', 'rb') as file:
+    submit_response = requests.post(
+        "https://api.vectify.ai/pageindex/",
+        headers={"api_key": "YOUR_API_KEY_HERE"},
+        files={"file": file}
+    )
+doc_id = submit_response.json()["doc_id"]
+
+# Check processing status and retrieve result
+status_response = requests.get(
+    f"https://api.vectify.ai/pageindex/{doc_id}/",
+    headers={"api_key": "YOUR_API_KEY_HERE"}
+)
+status_data = status_response.json()
+
+if status_data["status"] == "completed":
+    print("PageIndex Tree Structure:", status_data["result"])
+```
+
 ---
 
-import {Steps, Cards} from 'nextra/components'
+### 🔎 PageIndex Retrieval
 
-# Nextra Docs Starter
+Use this API to retrieve relevant content from a document. This requires a completed PageIndex tree generation (`doc_id`).
 
-This starter template includes the following features:
+**Endpoints**
 
-<Cards>
-    <Cards.Card
-        icon={<img src="/images/general/icon.svg" alt="Logo" width={28} height={28}/>}
-        title="Nextra 4"
-        href="https://nextra.site"
-    />
-    <Cards.Card
-        icon=""
-        title="Search with Pagefind"
-        href="https://the-guild.dev/blog/nextra-4#new-search-engine--pagefind"
-    />
-</Cards>
+* **Submit a query for retrieval:** `https://api.vectify.ai/pageindex/{doc_id}?query=YOUR_QUERY_TEXT` (GET)
+* **Get Retrieval Result:** `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/` (GET)
 
-[**Live Demo →**](https://nextra-docs-starter.vercel.app)
+**Example (Python)**
 
-[**Check this on GitHub →**](https://github.com/phucbm/nextra-docs-starter)
+```python
+import requests
 
-## Quick Start
+# Submit retrieval query (single GET request)
+query = "What are the main risk factors?"
+doc_id = "YOUR_PAGEINDEX_DOC_ID"
 
-You can deploy this template on Vercel by clicking the button below
+retrieval_response = requests.get(
+    f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
+    headers={'api_key': 'YOUR_API_KEY_HERE'}
+)
+retrieval_id = retrieval_response.json()["retrieval_id"]
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fphucbm%2Fnextra-docs-starter)
+# Check status and retrieve result
+status_response = requests.get(
+    f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
+    headers={'api_key': 'YOUR_API_KEY_HERE'}
+)
+status_data = status_response.json()
 
-Or you can follow the steps below to clone the repository and run it locally.
+if status_data["status"] == "completed":
+    print("Retrieved Content:", status_data["retrieved_nodes"])
+```
 
-<Steps>
-    ### Clone this repository
+---
 
-    Using the GitHub CLI:
-    ```bash
-    gh repo clone phucbm/nextra-docs-starter
-    ```
+👉 See the full [API Reference](/api-endpoints) for optional parameters, error codes, and integration guides.
 
-    ### Install
-    ```bash
-    pnpm i
-    ```
 
-    ### Run the development server
-    ```bash
-    pnpm dev
-    ```
-</Steps>
+**📝 Notes**
+
+* Accepts **PDF files only** (more formats coming soon)
+* Retrieval depends on a completed PageIndex computation and requires a valid `doc_id`
+* Continuous updates: better parsing, broader format support, and database export coming soon
+
+---
+
+## 💬 Support
+
+* 🤝 [Join our Discord](https://discord.gg/VuXuf29EUj)
+* 📨 [Leave us a message](https://ii2abc2jejf.typeform.com/to/meB40zV0)

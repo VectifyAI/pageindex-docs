@@ -1,15 +1,33 @@
 export default {
-    about: 'About',
+    home: {
+        title: 'Home',
+        href: 'https://pageindex.ai',
+        type: 'page'
+    },
+    dashboard: {
+        title: 'Dashboard',
+        href: 'https://pageindex.vectify.ai',
+        type: 'page'
+    },
+    introduction: 'Introduction',
     index:  'Quick Start',
+    api: 'API Reference',
     Tutorials: {
       type: 'separator',
       title: 'Tutorials'
     },
-    test: {
-        title: 'Test',
+    docSearch: {
+        title: 'Doc Search',
     },
-    api: {
-        title: 'API',
-    }
+    // test: {
+    //     title: 'Test',
+    // },
+    More: {
+        type: 'separator',
+        title: 'More'
+      },
+    roadmap: {
+        title: 'Roadmap',
+    },
 }
   

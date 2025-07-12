@@ -42,6 +42,7 @@ export default async function RootLayout({children}) {
         </Head>
         <body>
         <Layout
+            toc={{title: 'Tree Structure'}}
             banner={banner}
             sidebar={{ toggleButton: false }}
             navbar={navbar}

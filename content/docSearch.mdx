@@ -1,32 +1,71 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+
 ## 📄 Document Search Examples
 
-{/* Currently, PageIndex provides RAG capabilities within a single document. 
-For users who need to select which document to retrieve from, we offer two examples demonstrating how to search across documents in different scenarios. */}
 
 PageIndex currently enables reasoning-based RAG within a single document by default.
+
 For users who need to search across multiple documents, we provide two best-practice workflows below for different scenarios.
 
-### SQL-based Document Search
+---
+### Metadata-based Document Search
 
-When your documents include structured metadata, you can leverage SQL for efficient and accurate document searching. This approach works best when documents can be clearly distinguished by their metadata.
+This approach works well when your documents can be distinguished by their metadata.
 
-**Example Pipeline**
-1. Store documents and metadata in a database table  
-2. Use LLM to transform natural language questions into SQL queries  
-3. Execute the SQL query to retrieve relevant documents  
+**Examples include:**
+
+- Financial reports categorized by company and time period
+- Legal documents categorized by case type
+- Medical records categorized by patient or condition
+- And many others
+
+In such cases, you can search documents  by leveraging their metadata. A popular method is to use "Query to SQL" for  document retrieval.
 
 
+#### Example Pipeline
+<Steps>
+
+#### 1. Set up SQL tables
+
+Store documents along with their metadata and the PageIndex `doc_id` in a database table.
+
+#### 2. Query to SQL
+
+Use an LLM to transform a user’s retrieval request into a SQL query to fetch relevant documents.
+
+#### 3. Retrieve with PageIndex
+
+Use the PageIndex `doc_id` of the retrieved documents to perform further retrieval via the PageIndex retrieval API.
+</Steps>
+
+
+
+<Callout>PageIndex with Metadata support is coming sooon. Fill out this form to get early access to this function.</Callout>
+
+---
 
 ### Description-based Document Search
 
-For documents that can't be distinguished by metadata, use LLM-generated descriptions for document selection.
+For documents that can’t be easily distinguished by metadata, you can use LLM-generated descriptions to help with document selection.
 
-**Example Prompt**
 
-Below is a sample prompt for document selection based on their descriptions:
+#### Example Pipeline
+
+<Steps>
+
+#### 1. Description Generation
+
+Generate a description for each document based on its PageIndex tree structure and node summaries.
+
+#### 2. Search with LLM
+
+Use an LLM to select relevant documents by comparing the user query against the generated descriptions.
+
+Below is a sample prompt for selecting documents based on their descriptions:
 
 ```python
-prompt = """ 
+prompt = f""" 
 You are given a list of documents with their IDs, file names, and descriptions. Your task is to select documents that may contain information relevant to answering the user query.
 
 Query: {query}
@@ -49,10 +88,7 @@ Return only the JSON structure, with no additional output.
 """
 ```
 
-<div className="mt-4 bg-yellow-50 dark:bg-yellow-900/30 rounded-md p-4 my-2 border border-yellow-200 dark:border-yellow-700">
-<strong>Tips</strong>
-For large document collections, you can divide documents into groups and process groups in parallel for document selection.
-</div>
+</Steps>
 
 
 ## 💬 Help & Community

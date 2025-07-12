@@ -1,3 +1,5 @@
+import { Callout } from 'nextra/components'
+
 ## 🚀 Quickstart: PageIndex API
 
 Get started with PageIndex by first getting your 🔑 [API key](https://pageindex.vectify.ai/api-keys).
@@ -12,7 +14,9 @@ This document provides a brief introduction to using the API and includes exampl
 
 
 ### 🌲 PageIndex Tree Generation
-
+<Callout type="info">
+  Currently accepts **PDF files only** (more formats coming soon)
+</Callout>
 Use this API to extract and return a PageIndex structure from a document.
 
 **Endpoints**
@@ -51,8 +55,15 @@ if status_data.get("status") == "completed":
 ```
 
 
-### 🔎 PageIndex Retrieval
 
+### 🔎 PageIndex Retrieval
+<Callout type="info">
+  Retrieval function requries a completed PageIndex tree generation.
+</Callout>
+
+<Callout type="info">
+  Currently only support one document retrieval, multiple document retreival is comming soon. See also [Doc Search](/docSearch) page for docuemnt search examples.
+</Callout>
 Use this API to retrieve relevant content from a document. This requires a completed PageIndex tree generation (`doc_id`).
 
 **Endpoints**
@@ -89,11 +100,6 @@ if status_data.get("status") == "completed":
 
 👉 See the full [API Reference](/api) for optional parameters, error codes, and integration guides.
 
-**📝 Notes**
-
-* Accepts **PDF files only** (more formats coming soon)
-* Retrieval depends on a completed PageIndex computation and requires a valid `doc_id`
-* Continuous updates: better parsing, broader format support, and database export coming soon
 
 
 

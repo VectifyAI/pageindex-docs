@@ -9,17 +9,20 @@ export default {
         href: 'https://pageindex.vectify.ai',
         type: 'page'
     },
+
     Overview: {
       type: 'separator',
       title: 'Overview'
     },
     index: 'Introduction',
+
     API: {
       type: 'separator',
       title: 'API'
     },
     quickstart:  'Quickstart',
     api: 'API Reference',
+
     Tutorials: {
       type: 'separator',
       title: 'Tutorials'
@@ -27,9 +30,7 @@ export default {
     docSearch: {
         title: 'Doc Search',
     },
-    // test: {
-    //     title: 'Test',
-    // },
+
     More: {
         type: 'separator',
         title: 'More'

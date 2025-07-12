@@ -11,7 +11,7 @@ export const metadata = {
 
 const banner = (
     <Banner storageKey="some-key">
-        🎉  <Link href="http://pageindex.vectify.ai/" className='text-white underline hover:text-blue-200 transition-colors'>PageIndex Dashboard is now live! Read more →</Link>
+        🎉  <Link href="http://pageindex.vectify.ai/" className='text-white underline hover:text-blue-200 transition-colors'>PageIndex Dashboard is now live! Access it now →</Link>
     </Banner>
 )
 const navbar = (

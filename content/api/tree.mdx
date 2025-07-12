@@ -1,111 +1,148 @@
+## 🌲 PageIndex Tree Generation API
 
-## 🚀 Quickstart: PageIndex API
+### Submit Document for Tree Generation
 
-Get started with PageIndex by first getting your 🔑 [API key](https://pageindex.vectify.ai/api-keys).
+* **Endpoint:** `POST` `https://api.vectify.ai/pageindex/`
+* **Description:** Upload a PDF document to generate a PageIndex hierarchical tree. Immediately returns a document identifier (`doc_id`) for subsequent operations.
 
-The PageIndex API consists of two main components:
+**Request Body (multipart/form-data):**
 
-* **PageIndex Tree Generation**: Upload a document to generate a PageIndex tree index.
-* **PageIndex Retrieval**: Ask a query to retrieve relevant content from a document.
+* `file` (binary, required): PDF document.
 
-This document provides a brief introduction to using the API and includes example response formats.
 
----
+**Optional Fields:**
 
-### 🌲 PageIndex Tree Generation
+| Field Name               | Description                          | Type/Allowed Values                  | Default               |
+| ------------------------ | ------------------------------------ | ------------------------------------ | --------------------- |
+| `model`                  | The OpenAI model to use              | String (e.g., `"gpt-4o-2024-11-20"`) | `"gpt-4o-2024-11-20"` |
+| `if_add_node_id`         | Include a node ID for each node      | `"yes"` / `"no"`                     | `"yes"`               |
+| `if_add_node_text`       | Include the full text for each node  | `"yes"` / `"no"`                     | `"no"`                |
+| `if_add_node_summary`    | Include a summary for each node      | `"yes"` / `"no"`                     | `"no"`                |
+| `if_add_doc_description` | Include a document-level description | `"yes"` / `"no"`                     | `"yes"`               |
 
-Use this API to extract and return a PageIndex structure from a document.
-
-**Endpoints**
-
-* **Submit a document:** `https://api.vectify.ai/pageindex/` (POST)
-* **Get status and result:** `https://api.vectify.ai/pageindex/{doc_id}/` (GET)
-* **Delete:** `https://api.vectify.ai/pageindex/{doc_id}/` (DELETE)
-
-**Example (Python, with variables)**
+**Example:**
 
 ```python
-import requests
-
-api_key = "YOUR_API_KEY"
-file_path = "./2023-annual-report.pdf"
-
-# Submit document for PageIndex tree generation
-with open(file_path, 'rb') as file:
-    submit_response = requests.post(
+with open("./2023-annual-report.pdf", "rb") as file:
+    response = requests.post(
         "https://api.vectify.ai/pageindex/",
-        headers={"api_key": api_key},
+        headers={"api_key": "YOUR_API_KEY_HERE"},
         files={"file": file}
     )
-
-doc_id = submit_response.json().get("doc_id")
-
-# Check processing status and retrieve result
-status_response = requests.get(
-    f"https://api.vectify.ai/pageindex/{doc_id}/",
-    headers={"api_key": api_key}
-)
-status_data = status_response.json()
-
-if status_data.get("status") == "completed":
-    print("PageIndex Tree Structure:", status_data.get("result"))
 ```
 
----
-
-### 🔎 PageIndex Retrieval
-
-Use this API to retrieve relevant content from a document. This requires a completed PageIndex tree generation (`doc_id`).
-
-**Endpoints**
-
-* **Submit a query for retrieval:** `https://api.vectify.ai/pageindex/{doc_id}?query=your_query_text` (GET)
-* **Get retrieval result:** `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/` (GET)
-
-**Example (Python, with variables)**
+**Example (with optional parameters)**
 
 ```python
-import requests
+with open("./2023-annual-report.pdf", "rb") as file:
+    response = requests.post(
+        "https://api.vectify.ai/pageindex/",
+        headers={"api_key": "YOUR_API_KEY_HERE"},
+        files={"file": file},
+        data={
+            "if_add_doc_description": "no"
+        }
+    )
+```
 
-api_key = "YOUR_API_KEY"
-doc_id = "YOUR_PAGEINDEX_DOC_ID"
-query = "What are the main risk factors?"
+**Example Response:**
 
-# Submit retrieval query (single GET request)
-retrieval_response = requests.get(
-    f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
-    headers={'api_key': api_key}
-)
-retrieval_id = retrieval_response.json().get("retrieval_id")
-
-# Check status and retrieve result
-status_response = requests.get(
-    f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
-    headers={'api_key': api_key}
-)
-status_data = status_response.json()
-
-if status_data.get("status") == "completed":
-    print("Retrieved Content:", status_data.get("retrieved_nodes"))
+```json
+{ "doc_id": "abc123def456" }
 ```
 
 ---
 
-👉 See the full [API Reference](/api-endpoints) for optional parameters, error codes, and integration guides.
+### Get Processing Status & Tree Structure
 
-**📝 Notes**
+* **Endpoint:**  `GET` `https://api.vectify.ai/pageindex/{doc_id}/`
+* **Description:**  Check processing status and (when complete) get the PageIndex tree for a submitted document.
 
-* Accepts **PDF files only** (more formats coming soon)
-* Retrieval depends on a completed PageIndex computation and requires a valid `doc_id`
-* Continuous updates: better parsing, broader format support, and database export coming soon
+**Parameters (URL Path):**
+
+* `doc_id` (string, required): Document ID.
+
+**Example:**
+
+```python
+doc_id = "abc123def456"
+
+response = requests.get(
+    f"https://api.vectify.ai/pageindex/{doc_id}/",
+    headers={"api_key": "YOUR_API_KEY_HERE"}
+)
+```
+
+**Example Response (Processing):**
+
+```json
+{
+  "doc_id": "abc123def456",
+  "status": "processing"
+}
+```
+
+**Example Response (Completed):**
+
+```json
+{
+  "doc_id": "abc123def456",
+  "status": "completed",
+  "result": [
+    ...
+    {
+      "title": "Financial Stability",
+      "node_id": "0006",
+      "start_index": 21,
+      "end_index": 22,
+      "summary": "The Federal Reserve maintains financial stability by...",
+      "nodes": [
+        {
+          "title": "Monitoring Financial Vulnerabilities",
+          "node_id": "0007",
+          "start_index": 22,
+          "end_index": 28,
+          "summary": "The Federal Reserve's monitoring focuses on..."
+        },
+        {
+          "title": "Domestic and International Cooperation and Coordination",
+          "node_id": "0008",
+          "start_index": 28,
+          "end_index": 31,
+          "summary": "In 2023, the Federal Reserve collaborated internationally..."
+        }
+      ]
+    }
+    ...
+  ]
+}
+```
+
+---
+
+### Delete a PageIndex Document
+
+* **Endpoint:**  `DELETE` `https://api.vectify.ai/pageindex/{doc_id}/`
+* **Description:**  Permanently delete a PageIndex document and all its associated data.
+
+**Parameters (URL Path):**
+
+* `doc_id` (string, required): Document ID.
+
+**Example:**
+
+```python
+doc_id = "abc123def456"
+
+response = requests.delete(
+    f"https://api.vectify.ai/pageindex/{doc_id}/",
+    headers={"api_key": "YOUR_API_KEY_HERE"}
+)
+```
 
 ---
 
 ## 💬 Support
 
 * 🤝 [Join our Discord](https://discord.gg/VuXuf29EUj)
-* 📨 [Leave us a message](https://ii2abc2jejf.typeform.com/to/meB40zV0)
-
----
-
-Let me know if you want even more detailed comments, error handling, or want it in another language (like JavaScript, Bash, etc)!
+* 📨 [Contact Us](https://ii2abc2jejf.typeform.com/to/meB40zV0)

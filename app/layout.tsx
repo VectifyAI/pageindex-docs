@@ -9,12 +9,16 @@ export const metadata = {
     // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
 }
 
-const banner = <Banner storageKey="some-key">This template was created with 🩸 and 💦 by <Link href="https://github.com/phucbm">PHUCBM</Link> 🐧</Banner>
+const banner = (
+    <Banner storageKey="some-key">
+        🎉  <Link href="http://pageindex.vectify.ai/" className='text-white underline hover:text-blue-200 transition-colors'>PageIndex Dashboard is now live! Read more →</Link>
+    </Banner>
+)
 const navbar = (
     <Navbar
         logo={<img src="/images/general/pi-logo.png" alt="Logo" style={{height: 45}}/>}
         chatLink="https://discord.gg/VuXuf29EUj"
-        projectLink="https://pageindex.ai"
+        projectLink="https://github.com/VectifyAI/PageIndex"
         // ... Your additional navbar options
     />
 )
@@ -38,11 +42,11 @@ export default async function RootLayout({children}) {
         </Head>
         <body>
         <Layout
-            // banner={banner}
+            banner={banner}
             sidebar={{ toggleButton: false }}
             navbar={navbar}
             pageMap={await getPageMap()}
-            docsRepositoryBase="https://github.com/phucbm/nextra-docs-starter/tree/main"
+            // docsRepositoryBase="https://github.com/phucbm/nextra-docs-starter/tree/main"
             footer={footer}
             // ... Your additional layout options
         >

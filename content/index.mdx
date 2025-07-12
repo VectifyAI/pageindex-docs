@@ -1,101 +1,111 @@
-## 🚀 Quickstart: PageIndex API
+# What is PageIndex?
 
-Get started with PageIndex by first getting your 🔑 [API key](https://pageindex.vectify.ai/api-keys).
+Traditional vector-based RAG relies on semantic similarity. However, similarity ≠ relevance — and in retrieval, relevance is what truly matters. While vector-based RAG efficiently identifies broad thematic content, it often fails to retrieve the exact information required, particularly in specialized domains where many sections share similar language but differ in critical details.
 
-The PageIndex API consists of two main components:
+Inspired by [AlphaGo](https://deepmind.google/research/projects/alphago/), we developed <span className="text-vblue-500 font-semibold">PageIndex</span>, a reasoning-based RAG system that simulates how human experts navigate and extract knowledge from long documents through tree search. PageIndex first generates a hierarchical "table of contents" tree that maintains the original document's logical flow and organization structure. After tree generation, a retrieval module navigates the tree to retrieve relevant content for downstream generation tasks. The retrieved results naturally include their structural locations within the tree, greatly improving retrieval accuracy and enabling efficient incorporation of human preferences or expert knowledge.
 
-* **PageIndex Tree Generation**: Upload a document to generate a PageIndex tree index.
-* **PageIndex Retrieval**: Ask a query to retrieve relevant content from a document.
 
-This document provides a brief introduction to using the API and includes example response formats.
 
----
+## 🌲 PageIndex Tree Generation
 
-### 🌲 PageIndex Tree Generation
+  PageIndex generates a hierarchical "table of contents" tree  that maintains the original document's logical flow and organization structure. This LLM-optimized "table of contents" enables precise navigation and is ready for reasoning-based RAG. 
 
-Use this API to extract and return a PageIndex structure from a document.
+- **No Vector DB Required:**
+  Tree structures are represented as lightweight JSON objects , eliminating the need for expensive vector databases.
 
-**Endpoints**
+- **No Chunking Required:**
+  Preserves natural document structure without artificial text splitting for better context retention.
 
-* **Submit a document:** `https://api.vectify.ai/pageindex/` `(POST)`
-* **Get status and result:** `https://api.vectify.ai/pageindex/{doc_id}/` `(GET)`
-* **Delete:** `https://api.vectify.ai/pageindex/{doc_id}/` `(DELETE)`
+- **Node Summary with Precise Page Referencing:**
+  Provides exact page references and summaries for precise information extraction.
 
-**Example (Python)**
+- **Optimized for Long Documents:**
+  Tree generation optimized for financial reports, legal documents, and technical manuals beyond LLM context limits.
 
-```python
-import requests
+Here is an example output. See more <a href="https://github.com/VectifyAI/PageIndex/tree/main/docs" target="_blank" rel="noopener noreferrer">example documents</a> and <a href="https://github.com/VectifyAI/PageIndex/tree/main/results" target="_blank" rel="noopener noreferrer">generated trees</a>.
 
-# Submit document for PageIndex tree generation
-with open('./2023-annual-report.pdf', 'rb') as file:
-    submit_response = requests.post(
-        "https://api.vectify.ai/pageindex/",
-        headers={"api_key": "YOUR_API_KEY_HERE"},
-        files={"file": file}
-    )
-doc_id = submit_response.json()["doc_id"]
-
-# Check processing status and retrieve result
-status_response = requests.get(
-    f"https://api.vectify.ai/pageindex/{doc_id}/",
-    headers={"api_key": "YOUR_API_KEY_HERE"}
-)
-status_data = status_response.json()
-
-if status_data["status"] == "completed":
-    print("PageIndex Tree Structure:", status_data["result"])
+```json
+{
+  "title": "Financial Stability",
+  "node_id": "0006",
+  "start_index": 21,
+  "end_index": 22,
+  "summary": "The Federal Reserve ...",
+  "nodes": [
+    {
+      "title": "Monitoring Financial Vulnerabilities",
+      "node_id": "0007",
+      "start_index": 22,
+      "end_index": 28,
+      "summary": "The Federal Reserve's monitoring ..."
+    },
+    {
+      "title": "Domestic and International Cooperation and Coordination",
+      "node_id": "0008",
+      "start_index": 28,
+      "end_index": 31,
+      "summary": "In 2023, the Federal Reserve collaborated ..."
+    }
+  ]
+}
 ```
 
----
+## 🔎 PageIndex Retrieval
 
-### 🔎 PageIndex Retrieval
+Once documents are transformed into hierarchical tree structures, the PageIndex retrieval module extracts relevant context from these trees. It leverages both LLM-based tree search and value-based tree search to perform efficient and accurate retrieval. A brief overview of the tree-search strategy can be found [here](/examples/hybrid-search).
 
-Use this API to retrieve relevant content from a document. This requires a completed PageIndex tree generation (`doc_id`).
+Specifically, given a query and a tree, the retrieval module performs a tree search and returns the most relevant nodes, with relevant paragraphs and the corresponding tree search trajectory. The retrieval process has the following properties:
 
-**Endpoints**
+- **No Top-K Selection Required**
+  Tree search automatically identifies all relevant tree nodes without the need for manual parameter tuning.
 
-* **Submit a query for retrieval:** `https://api.vectify.ai/pageindex/{doc_id}?query=YOUR_QUERY_TEXT` (GET)
-* **Get Retrieval Result:** `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/` (GET)
+- **Transparent Node Trajectories**
+  Returns the complete search path through the tree structure, offering transparency and rich contextual information.
 
-**Example (Python)**
+- **Exact Page References**
+  Every retrieved node includes precise page numbers and locations from the original document for verifiable information retrieval.
 
-```python
-import requests
+- **LLM-Ready Output Format**
+  Structured data output with relevant paragraphs and search trajectories, ready for downstream LLM processing.
 
-# Submit retrieval query (single GET request)
-query = "What are the main risk factors?"
-doc_id = "YOUR_PAGEINDEX_DOC_ID"
-retrieval_response = requests.get(
-    f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
-    headers={'api_key': 'YOUR_API_KEY_HERE'}
-)
-retrieval_id = retrieval_response.json()["retrieval_id"]
+Here is an example response from the PageIndex Retrieval API.
 
-# Check status and retrieve result
-status_response = requests.get(
-    f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
-    headers={'api_key': 'YOUR_API_KEY_HERE'}
-)
-status_data = status_response.json()
+```json copy
+{
+  "title": "Monetary Policy and Economic Developments",
+  "node_id": "0004",
+  "nodes": [
+    {
+      "title": "March 2024 Summary",
+      "node_id": "0005",
+      "relevant_contents": [{
+          "physical_index": 10, 
+          "relevant_content": "The labor market has gained averaging 239,000 per month since June 2023..."
+        }]
+    },
+    {
+      "title": "June 2023 Summary",
+      "node_id": "0006",
+      "relevant_contents": [{
+          "physical_index": 15, 
+          "relevant_content": "The labor market has remained very tight, with job gains averaging 314,000 per month during..."
+        }]
+    }]
+}
+    
 
-if status_data["status"] == "completed":
-    print("Retrieved Content:", status_data["retrieved_nodes"])
 ```
 
----
+# Get Started
 
-👉 See the full [API Reference](/api-endpoints) for optional parameters, error codes, and integration guides.
+The PageIndex tree generation and retrieval features are now integrated into both our dashboard and API. Experience the next generation of RAG by simply uploading your documents through our dashboard:
 
+- [Dashboard](/dashboard)  
 
-**📝 Notes**
+Alternatively, our API service allows you to seamlessly integrate our RAG pipeline into your existing systems:
+- [API](/quick-start)
 
-* Accepts **PDF files only** (more formats coming soon)
-* Retrieval depends on a completed PageIndex computation and requires a valid `doc_id`
-* Continuous updates: better parsing, broader format support, and database export coming soon
+## 💬 Help & Community
 
----
-
-## 💬 Support
-
-* 🤝 [Join our Discord](https://discord.gg/VuXuf29EUj)
-* 📨 [Leave us a message](https://ii2abc2jejf.typeform.com/to/meB40zV0)
+- 🤝 [Join our Discord](https://discord.gg/VuXuf29EUj)  
+- 📨 [Leave us a message](https://ii2abc2jejf.typeform.com/to/meB40zV0)

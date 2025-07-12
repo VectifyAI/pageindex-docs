@@ -1,0 +1,101 @@
+## 🚀 Quickstart: PageIndex API
+
+Get started with PageIndex by first getting your 🔑 [API key](https://pageindex.vectify.ai/api-keys).
+
+The PageIndex API consists of two main components:
+
+* **PageIndex Tree Generation**: Upload a document to generate a PageIndex tree index.
+* **PageIndex Retrieval**: Ask a query to retrieve relevant content from a document.
+
+This document provides a brief introduction to using the API and includes example response formats.
+
+---
+
+### 🌲 PageIndex Tree Generation
+
+Use this API to extract and return a PageIndex structure from a document.
+
+**Endpoints**
+
+* **Submit a document:** `https://api.vectify.ai/pageindex/` `(POST)`
+* **Get status and result:** `https://api.vectify.ai/pageindex/{doc_id}/` `(GET)`
+* **Delete:** `https://api.vectify.ai/pageindex/{doc_id}/` `(DELETE)`
+
+**Example (Python)**
+
+```python
+import requests
+
+# Submit document for PageIndex tree generation
+with open('./2023-annual-report.pdf', 'rb') as file:
+    submit_response = requests.post(
+        "https://api.vectify.ai/pageindex/",
+        headers={"api_key": "YOUR_API_KEY_HERE"},
+        files={"file": file}
+    )
+doc_id = submit_response.json()["doc_id"]
+
+# Check processing status and retrieve result
+status_response = requests.get(
+    f"https://api.vectify.ai/pageindex/{doc_id}/",
+    headers={"api_key": "YOUR_API_KEY_HERE"}
+)
+status_data = status_response.json()
+
+if status_data["status"] == "completed":
+    print("PageIndex Tree Structure:", status_data["result"])
+```
+
+---
+
+### 🔎 PageIndex Retrieval
+
+Use this API to retrieve relevant content from a document. This requires a completed PageIndex tree generation (`doc_id`).
+
+**Endpoints**
+
+* **Submit a query for retrieval:** `https://api.vectify.ai/pageindex/{doc_id}?query=YOUR_QUERY_TEXT` (GET)
+* **Get Retrieval Result:** `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/` (GET)
+
+**Example (Python)**
+
+```python
+import requests
+
+# Submit retrieval query (single GET request)
+query = "What are the main risk factors?"
+doc_id = "YOUR_PAGEINDEX_DOC_ID"
+retrieval_response = requests.get(
+    f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
+    headers={'api_key': 'YOUR_API_KEY_HERE'}
+)
+retrieval_id = retrieval_response.json()["retrieval_id"]
+
+# Check status and retrieve result
+status_response = requests.get(
+    f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
+    headers={'api_key': 'YOUR_API_KEY_HERE'}
+)
+status_data = status_response.json()
+
+if status_data["status"] == "completed":
+    print("Retrieved Content:", status_data["retrieved_nodes"])
+```
+
+---
+
+👉 See the full [API Reference](/api-endpoints) for optional parameters, error codes, and integration guides.
+
+
+**📝 Notes**
+
+* Accepts **PDF files only** (more formats coming soon)
+* Retrieval depends on a completed PageIndex computation and requires a valid `doc_id`
+* Continuous updates: better parsing, broader format support, and database export coming soon
+
+---
+
+## 💬 Support
+
+* 🤝 [Join our Discord](https://discord.gg/VuXuf29EUj)
+* 📨 [Leave us a message](https://ii2abc2jejf.typeform.com/to/meB40zV0)

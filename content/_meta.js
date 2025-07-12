@@ -13,12 +13,12 @@ export default {
       type: 'separator',
       title: 'Overview'
     },
-    introduction: 'Introduction',
+    index: 'Introduction',
     API: {
       type: 'separator',
       title: 'API'
     },
-    index:  'Quickstart',
+    quickstart:  'Quickstart',
     api: 'API Reference',
     Tutorials: {
       type: 'separator',

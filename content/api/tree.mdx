@@ -23,21 +23,31 @@
 **Example:**
 
 ```python
-with open("./2023-annual-report.pdf", "rb") as file:
+import requests
+
+api_key = "YOUR_API_KEY"
+file_path = "./2023-annual-report.pdf"
+
+with open(file_path, "rb") as file:
     response = requests.post(
         "https://api.vectify.ai/pageindex/",
-        headers={"api_key": "YOUR_API_KEY_HERE"},
+        headers={"api_key": api_key},
         files={"file": file}
     )
 ```
 
 **Example (with optional parameters)**
-
 ```python
-with open("./2023-annual-report.pdf", "rb") as file:
+import requests
+
+api_key = "YOUR_API_KEY"
+file_path = "./2023-annual-report.pdf"
+
+
+with open(file_path, "rb") as file:
     response = requests.post(
         "https://api.vectify.ai/pageindex/",
-        headers={"api_key": "YOUR_API_KEY_HERE"},
+        headers={"api_key": api_key},
         files={"file": file},
         data={
             "if_add_doc_description": "no"
@@ -64,11 +74,14 @@ with open("./2023-annual-report.pdf", "rb") as file:
 **Example:**
 
 ```python
+import requests
+
+api_key = "YOUR_API_KEY"
 doc_id = "abc123def456"
 
 response = requests.get(
     f"https://api.vectify.ai/pageindex/{doc_id}/",
-    headers={"api_key": "YOUR_API_KEY_HERE"}
+    headers={"api_key": api_key}
 )
 ```
 
@@ -130,11 +143,14 @@ response = requests.get(
 **Example:**
 
 ```python
+import requests
+
+api_key = "YOUR_API_KEY"
 doc_id = "abc123def456"
 
 response = requests.delete(
     f"https://api.vectify.ai/pageindex/{doc_id}/",
-    headers={"api_key": "YOUR_API_KEY_HERE"}
+    headers={"api_key": api_key}
 )
 ```
 

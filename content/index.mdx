@@ -1,4 +1,4 @@
-# What is PageIndex?
+## What is PageIndex?
 
 Traditional vector-based RAG relies on semantic similarity. However, similarity ≠ relevance — and in retrieval, relevance is what truly matters. While vector-based RAG efficiently identifies broad thematic content, it often fails to retrieve the exact information required, particularly in specialized domains where many sections share similar language but differ in critical details.
 
@@ -6,7 +6,7 @@ Inspired by [AlphaGo](https://deepmind.google/research/projects/alphago/), we de
 
 
 
-## 🌲 PageIndex Tree Generation
+### 🌲 PageIndex Tree Generation
 
   PageIndex generates a hierarchical "table of contents" tree  that maintains the original document's logical flow and organization structure. This LLM-optimized "table of contents" enables precise navigation and is ready for reasoning-based RAG. 
 
@@ -50,7 +50,7 @@ Here is an example output. See more <a href="https://github.com/VectifyAI/PageIn
 }
 ```
 
-## 🔎 PageIndex Retrieval
+### 🔎 PageIndex Retrieval
 
 Once documents are transformed into hierarchical tree structures, the PageIndex retrieval module extracts relevant context from these trees. It leverages both LLM-based tree search and value-based tree search to perform efficient and accurate retrieval. A brief overview of the tree-search strategy can be found [here](/examples/hybrid-search).
 
@@ -95,15 +95,6 @@ Here is an example response from the PageIndex Retrieval API.
     
 
 ```
-
-### Get Started
-
-The PageIndex tree generation and retrieval features are now integrated into both our dashboard and API. Experience the next generation of RAG by simply uploading your documents through our dashboard:
-
-- [Dashboard](/dashboard)  
-
-Alternatively, our API service allows you to seamlessly integrate our RAG pipeline into your existing systems:
-- [API](/quick-start)
 
 ## 💬 Help & Community
 

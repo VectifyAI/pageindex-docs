@@ -11,21 +11,25 @@ The PageIndex API consists of two main components:
 
 This document provides a brief introduction to using the API and includes example response formats.
 
-
-
 ### 🌲 PageIndex Tree Generation
-<Callout type="info">
-  Currently accepts **PDF files only** (more formats coming soon)
-</Callout>
+
 Use this API to extract and return a PageIndex structure from a document.
 
-**Endpoints**
+<Callout type="info">
+  Currently accepts **PDF files** only (more formats coming soon).
+</Callout>
 
-* **Submit a document:** `https://api.vectify.ai/pageindex/` (POST)
-* **Get status and result:** `https://api.vectify.ai/pageindex/{doc_id}/` (GET)
-* **Delete:** `https://api.vectify.ai/pageindex/{doc_id}/` (DELETE)
+**Endpoints:**
 
-**Example (Python)**
+| Endpoint                                     | Method | Description                                         |
+| -------------------------------------------- | ------ | --------------------------------------------------- |
+| `https://api.vectify.ai/pageindex/`          | POST   | Submit a document to generate a PageIndex tree      |
+| `https://api.vectify.ai/pageindex/{doc_id}/` | GET    | Get status and tree generation result of a document |
+| `https://api.vectify.ai/pageindex/{doc_id}/` | DELETE | Delete a document and its PageIndex tree            |
+
+**Example (Python):**
+
+> Submit document for PageIndex tree generation
 
 ```python
 import requests
@@ -33,7 +37,6 @@ import requests
 api_key = "YOUR_API_KEY"
 file_path = "./2023-annual-report.pdf"
 
-# Submit document for PageIndex tree generation
 with open(file_path, 'rb') as file:
     submit_response = requests.post(
         "https://api.vectify.ai/pageindex/",
@@ -42,8 +45,11 @@ with open(file_path, 'rb') as file:
     )
 
 doc_id = submit_response.json().get("doc_id")
+```
 
-# Check processing status and retrieve result
+> Check processing status and retrieve result
+
+```python
 status_response = requests.get(
     f"https://api.vectify.ai/pageindex/{doc_id}/",
     headers={"api_key": api_key}
@@ -54,24 +60,28 @@ if status_data.get("status") == "completed":
     print("PageIndex Tree Structure:", status_data.get("result"))
 ```
 
-
-
 ### 🔎 PageIndex Retrieval
-<Callout type="info">
-  Retrieval function requries a completed PageIndex tree generation.
-</Callout>
 
-<Callout type="info">
-  Currently only support one document retrieval, multiple document retreival is comming soon. See also [Doc Search](/docSearch) page for docuemnt search examples.
-</Callout>
 Use this API to retrieve relevant content from a document. This requires a completed PageIndex tree generation (`doc_id`).
 
-**Endpoints**
+<Callout type="info">
+  Retrieval function requires a completed PageIndex tree generation.
+</Callout>
 
-* **Submit a query for retrieval:** `https://api.vectify.ai/pageindex/{doc_id}?query=YOUR_QUERY_TEXT` (GET)
-* **Get retrieval result:** `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/` (GET)
+<Callout type="info">
+  Currently, only single-document retrieval is supported. Multi-document retrieval is coming soon. See also the [Doc Search](/docSearch) page for document search examples.
+</Callout>
 
-**Example (Python)**
+**Endpoints:**
+
+| Endpoint                                                          | Method | Description                                                 |
+| ----------------------------------------------------------------- | ------ | ----------------------------------------------------------- |
+| `https://api.vectify.ai/pageindex/{doc_id}?query=YOUR_QUERY_TEXT` | GET    | Submit a query to retrieve relevant content from a document |
+| `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/`      | GET    | Get retrieval result and status                             |
+
+**Example (Python):**
+
+> Submit retrieval query
 
 ```python
 import requests
@@ -80,14 +90,16 @@ api_key = "YOUR_API_KEY"
 doc_id = "YOUR_PAGEINDEX_DOC_ID"
 query = "What are the main risk factors?"
 
-# Submit retrieval query (single GET request)
 retrieval_response = requests.get(
     f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
     headers={'api_key': api_key}
 )
 retrieval_id = retrieval_response.json().get("retrieval_id")
+```
 
-# Check status and retrieve result
+> Check status and retrieve result
+
+```python
 status_response = requests.get(
     f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
     headers={'api_key': api_key}
@@ -99,9 +111,6 @@ if status_data.get("status") == "completed":
 ```
 
 👉 See the full [API Reference](/api) for optional parameters, error codes, and integration guides.
-
-
-
 
 ## 💬 Support
 

@@ -20,13 +20,10 @@ import { Callout } from 'nextra/components'
 
 | Field Name               | Description                          | Type/Allowed Values                  | Default               |
 | ------------------------ | ------------------------------------ | ------------------------------------ | --------------------- |
-| `model`                  | The OpenAI model to use              | String (e.g., `"gpt-4o-2024-11-20"`) | `"gpt-4o-2024-11-20"` |
-| `if_add_node_id`         | Include a node ID for each node      | `"yes"` / `"no"`                     | `"yes"`               |
 | `if_add_node_text`       | Include the full text for each node  | `"yes"` / `"no"`                     | `"no"`                |
 | `if_add_node_summary`    | Include a summary for each node      | `"yes"` / `"no"`                     | `"no"`                |
-| `if_add_doc_description` | Include a document-level description | `"yes"` / `"no"`                     | `"yes"`               |
 
-**Example:**
+**Example**
 
 ```python
 import requests
@@ -42,7 +39,7 @@ with open(file_path, "rb") as file:
     )
 ```
 
-**Example (with optional parameters):**
+**Example with optional parameters**
 ```python
 import requests
 
@@ -55,7 +52,7 @@ with open(file_path, "rb") as file:
         headers={"api_key": api_key},
         files={"file": file},
         data={
-            "if_add_doc_description": "no"
+            "if_add_node_summary": "no"
         }
     )
 ```

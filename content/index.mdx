@@ -17,33 +17,37 @@ Use this API to extract and return a PageIndex structure from a document.
 
 **Endpoints**
 
-* **Submit a document:** `https://api.vectify.ai/pageindex/` `(POST)`
-* **Get status and result:** `https://api.vectify.ai/pageindex/{doc_id}/` `(GET)`
-* **Delete:** `https://api.vectify.ai/pageindex/{doc_id}/` `(DELETE)`
+* **Submit a document:** `https://api.vectify.ai/pageindex/` (POST)
+* **Get status and result:** `https://api.vectify.ai/pageindex/{doc_id}/` (GET)
+* **Delete:** `https://api.vectify.ai/pageindex/{doc_id}/` (DELETE)
 
 **Example (Python)**
 
 ```python
 import requests
 
+api_key = "YOUR_API_KEY"
+file_path = "./2023-annual-report.pdf"
+
 # Submit document for PageIndex tree generation
-with open('./2023-annual-report.pdf', 'rb') as file:
+with open(file_path, 'rb') as file:
     submit_response = requests.post(
         "https://api.vectify.ai/pageindex/",
-        headers={"api_key": "YOUR_API_KEY_HERE"},
+        headers={"api_key": api_key},
         files={"file": file}
     )
-doc_id = submit_response.json()["doc_id"]
+
+doc_id = submit_response.json().get("doc_id")
 
 # Check processing status and retrieve result
 status_response = requests.get(
     f"https://api.vectify.ai/pageindex/{doc_id}/",
-    headers={"api_key": "YOUR_API_KEY_HERE"}
+    headers={"api_key": api_key}
 )
 status_data = status_response.json()
 
-if status_data["status"] == "completed":
-    print("PageIndex Tree Structure:", status_data["result"])
+if status_data.get("status") == "completed":
+    print("PageIndex Tree Structure:", status_data.get("result"))
 ```
 
 ---
@@ -55,37 +59,38 @@ Use this API to retrieve relevant content from a document. This requires a compl
 **Endpoints**
 
 * **Submit a query for retrieval:** `https://api.vectify.ai/pageindex/{doc_id}?query=YOUR_QUERY_TEXT` (GET)
-* **Get Retrieval Result:** `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/` (GET)
+* **Get retrieval result:** `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/` (GET)
 
 **Example (Python)**
 
 ```python
 import requests
 
-# Submit retrieval query (single GET request)
-query = "What are the main risk factors?"
+api_key = "YOUR_API_KEY"
 doc_id = "YOUR_PAGEINDEX_DOC_ID"
+query = "What are the main risk factors?"
+
+# Submit retrieval query (single GET request)
 retrieval_response = requests.get(
     f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
-    headers={'api_key': 'YOUR_API_KEY_HERE'}
+    headers={'api_key': api_key}
 )
-retrieval_id = retrieval_response.json()["retrieval_id"]
+retrieval_id = retrieval_response.json().get("retrieval_id")
 
 # Check status and retrieve result
 status_response = requests.get(
     f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
-    headers={'api_key': 'YOUR_API_KEY_HERE'}
+    headers={'api_key': api_key}
 )
 status_data = status_response.json()
 
-if status_data["status"] == "completed":
-    print("Retrieved Content:", status_data["retrieved_nodes"])
+if status_data.get("status") == "completed":
+    print("Retrieved Content:", status_data.get("retrieved_nodes"))
 ```
 
 ---
 
 👉 See the full [API Reference](/api-endpoints) for optional parameters, error codes, and integration guides.
-
 
 **📝 Notes**
 

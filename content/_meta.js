@@ -10,6 +10,10 @@ export default {
         type: 'page'
     },
     introduction: 'Introduction',
+    API: {
+      type: 'separator',
+      title: 'API'
+    },
     index:  'Quick Start',
     api: 'API Reference',
     Tutorials: {

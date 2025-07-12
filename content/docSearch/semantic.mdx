@@ -1,0 +1,45 @@
+import { Callout } from 'nextra/components'
+import { Steps } from 'nextra/components'
+
+##  Semantic-based Document Search
+
+For documents that covers diverse topics, one can also use vector-based semantic search to search the documents. The procedure is slighly different from the classic vector-search based method.
+
+#### Example Pipeline
+
+<Steps className="text-lg">
+
+#### 1. Chunking and Embedding
+Divide the documents into chunks, choose a embedding model to convert the chunks into vectors and store each vector with its corresponding `doc_id` in a vector database.
+
+
+#### 2. Vector Search
+
+Conduct Vector based search to get Top-K chunks with their `doc_id`.  For each document, assign each document a score to represent how relevant the document is.
+
+#### 3. Compute Document Score
+
+Let N be the number of content chunks associated with each document, and let **ChunkScore**(n) be the relevance score of chunk n. The document Score is computed as:
+
+
+```math
+\int x^2
+```
+
+- The sum aggregates relevance from all related chunks.
+- The +1 inside the square root ensures the formula handles nodes with zero chunks.
+- Dividing by N (the mean) would normalize the score, but would ignore the number of relevant chunks, treating nodes with many and few relevant chunks equally.
+- Using the square root in the denominator allows the score to increase with the number of relevant chunks, but with diminishing returns. This rewards nodes with more relevant chunks, while preventing large nodes from dominating due to quantity alone.
+- This scoring favors nodes with fewer, highly relevant chunks over those with many weakly relevant ones.
+
+
+
+
+</Steps>
+
+
+## 💬 Help & Community
+Contact us if you need any advice on conducting document searches for your use case.
+
+- 🤝 [Join our Discord](https://discord.gg/VuXuf29EUj)  
+- 📨 [Leave us a message](https://ii2abc2jejf.typeform.com/to/meB40zV0)

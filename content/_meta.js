@@ -19,7 +19,10 @@ export default {
       title: 'API'
     },
     index:  'Quickstart',
-    api: 'API Reference',
+    api: {
+      title: 'API Reference',
+      type: 'doc', 
+    },
     Tutorials: {
       type: 'separator',
       title: 'Tutorials'

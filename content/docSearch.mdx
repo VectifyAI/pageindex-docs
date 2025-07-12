@@ -52,11 +52,21 @@ For documents that can’t be easily distinguished by metadata, you can use LLM-
 
 #### Example Pipeline
 
-<Steps>
+<Steps className="text-lg">
 
 #### 1. Description Generation
 
 Generate a description for each document based on its PageIndex tree structure and node summaries.
+```python
+prompt = f"""
+You are given a table of contents structure of a document. 
+Your task is to generate a one-sentence description for the document that makes it easy to distinguish from other documents.
+    
+Table of Contents Tree Structure: {structure}
+
+Directly return the description, do not include any other text.
+"""
+```
 
 #### 2. Search with LLM
 

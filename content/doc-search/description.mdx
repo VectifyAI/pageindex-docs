@@ -11,7 +11,7 @@ For documents that don't have metadata, you can use LLM-generated descriptions t
 <Steps className="text-lg">
 
 #### 1. PageIndex Tree Generation
-Upload all the document into PageIndex to get their `doc_id` and tree structure.
+Upload all documents into PageIndex to get their `doc_id` and tree structure.
 
 #### 2. Description Generation
 
@@ -31,7 +31,7 @@ Directly return the description, do not include any other text.
 
 Use an LLM to select relevant documents by comparing the user query against the generated descriptions.
 
-Below is a sample prompt for selecting documents based on their descriptions:
+Below is a sample prompt for document selection based on their descriptions:
 
 ```python
 prompt = f""" 

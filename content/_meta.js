@@ -9,12 +9,16 @@ export default {
         href: 'https://pageindex.vectify.ai',
         type: 'page'
     },
+    Overview: {
+      type: 'separator',
+      title: 'Overview'
+    },
     introduction: 'Introduction',
     API: {
       type: 'separator',
       title: 'API'
     },
-    index:  'Quick Start',
+    index:  'Quickstart',
     api: 'API Reference',
     Tutorials: {
       type: 'separator',

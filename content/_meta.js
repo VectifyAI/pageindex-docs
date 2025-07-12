@@ -27,7 +27,7 @@ export default {
       type: 'separator',
       title: 'Tutorials'
     },
-    docSearch: {
+    "doc-search": {
         title: 'Doc Search',
     },
 

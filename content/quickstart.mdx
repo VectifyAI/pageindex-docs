@@ -19,7 +19,7 @@ Use this API to extract and return a PageIndex structure from a document.
   Currently accepts **PDF files** only (more formats coming soon).
 </Callout>
 
-**Endpoints**
+**Endpoints:**
 
 | Endpoint                                     | Method | Description                                         |
 | -------------------------------------------- | ------ | --------------------------------------------------- |
@@ -27,7 +27,9 @@ Use this API to extract and return a PageIndex structure from a document.
 | `https://api.vectify.ai/pageindex/{doc_id}/` | GET    | Get status and tree generation result of a document |
 | `https://api.vectify.ai/pageindex/{doc_id}/` | DELETE | Delete a document and its PageIndex tree            |
 
-**Example (Python)**
+**Example (Python):**
+
+> Submit document for PageIndex tree generation
 
 ```python
 import requests
@@ -35,7 +37,6 @@ import requests
 api_key = "YOUR_API_KEY"
 file_path = "./2023-annual-report.pdf"
 
-# Submit document for PageIndex tree generation
 with open(file_path, 'rb') as file:
     submit_response = requests.post(
         "https://api.vectify.ai/pageindex/",
@@ -44,8 +45,11 @@ with open(file_path, 'rb') as file:
     )
 
 doc_id = submit_response.json().get("doc_id")
+```
 
-# Check processing status and retrieve result
+> Check processing status and retrieve result
+
+```python
 status_response = requests.get(
     f"https://api.vectify.ai/pageindex/{doc_id}/",
     headers={"api_key": api_key}
@@ -68,14 +72,16 @@ Use this API to retrieve relevant content from a document. This requires a compl
   Currently, only single-document retrieval is supported. Multi-document retrieval is coming soon. See also the [Doc Search](/docSearch) page for document search examples.
 </Callout>
 
-**Endpoints**
+**Endpoints:**
 
 | Endpoint                                                          | Method | Description                                                 |
 | ----------------------------------------------------------------- | ------ | ----------------------------------------------------------- |
 | `https://api.vectify.ai/pageindex/{doc_id}?query=YOUR_QUERY_TEXT` | GET    | Submit a query to retrieve relevant content from a document |
 | `https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/`      | GET    | Get retrieval result and status                             |
 
-**Example (Python)**
+**Example (Python):**
+
+> Submit retrieval query
 
 ```python
 import requests
@@ -84,14 +90,16 @@ api_key = "YOUR_API_KEY"
 doc_id = "YOUR_PAGEINDEX_DOC_ID"
 query = "What are the main risk factors?"
 
-# Submit retrieval query (single GET request)
 retrieval_response = requests.get(
     f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
     headers={'api_key': api_key}
 )
 retrieval_id = retrieval_response.json().get("retrieval_id")
+```
 
-# Check status and retrieve result
+> Check status and retrieve result
+
+```python
 status_response = requests.get(
     f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
     headers={'api_key': api_key}

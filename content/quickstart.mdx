@@ -92,7 +92,7 @@ query = "What are the main risk factors?"
 
 retrieval_response = requests.get(
     f"https://api.vectify.ai/pageindex/{doc_id}?query={query}",
-    headers={'api_key': api_key}
+    headers={"api_key": api_key}
 )
 retrieval_id = retrieval_response.json().get("retrieval_id")
 ```
@@ -102,7 +102,7 @@ retrieval_id = retrieval_response.json().get("retrieval_id")
 ```python
 status_response = requests.get(
     f"https://api.vectify.ai/pageindex/retrieval/{retrieval_id}/",
-    headers={'api_key': api_key}
+    headers={"api_key": api_key}
 )
 status_data = status_response.json()
 
@@ -110,7 +110,7 @@ if status_data.get("status") == "completed":
     print("Retrieved Content:", status_data.get("retrieved_nodes"))
 ```
 
-👉 See the full [API Reference](/api) for optional parameters, error codes, and integration guides.
+👉 See the full [API Reference](/api) for optional parameters, examples, and integration guides.
 
 ## 💬 Support
 

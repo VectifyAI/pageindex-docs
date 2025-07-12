@@ -3,6 +3,8 @@ import {Banner, Head} from 'nextra/components'
 import {getPageMap} from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import Link from "next/link";
+import 'katex/dist/katex.min.css'
+
 
 export const metadata = {
     // Define your metadata here

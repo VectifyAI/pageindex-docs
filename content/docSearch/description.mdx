@@ -10,7 +10,10 @@ For documents that doesn't have metadata, you can use LLM-generated descriptions
 
 <Steps className="text-lg">
 
-#### 1. Description Generation
+#### 1. PageIndex Tree Generation
+Upload all the document into PageIndex to get their `doc_id` and tree structure.
+
+#### 2. Description Generation
 
 Generate a description for each document based on its PageIndex tree structure and node summaries.
 ```python
@@ -24,7 +27,7 @@ Directly return the description, do not include any other text.
 """
 ```
 
-#### 2. Search with LLM
+#### 3. Search with LLM
 
 Use an LLM to select relevant documents by comparing the user query against the generated descriptions.
 
@@ -53,6 +56,10 @@ Response Format:
 Return only the JSON structure, with no additional output.
 """
 ```
+
+#### 4. Retrieve with PageIndex
+
+Use the PageIndex `doc_id` of the retrieved documents to perform further retrieval via the PageIndex retrieval API.
 
 </Steps>
 
